@@ -4,6 +4,7 @@ import (
     "fmt"
     "math"
     "io"
+    "os"
 )
 
 const (
@@ -15,19 +16,20 @@ const (
     angle = math.Pi / 6
 )
 
-var sin30 = math.Sin(angle)
-var cos30 = math.Cos(angle)
+var sin30, cos30 = math.Sincos(angle)
 
-func Write(out io.Writer) {
+type ZTransform func(float64, float64) float64
+
+func Write(out io.Writer, zTransform ZTransform) {
     fmt.Fprintf(out, "<svg xmlns='http://www.w3.org/2000/svg' " +
                "style='stroke: grey; fill: white; stroke-width: 0.7' " +
                "width='%d' height='%d'>", width, height)
     for i := 0; i < cells; i++ {
         for j := 0; j < cells; j++ {
-            ax, ay := corner(i + 1, j)
-            bx, by := corner(i, j)
-            cx, cy := corner(i, j + 1)
-            dx, dy := corner(i + 1, j + 1)
+            ax, ay := corner(i + 1, j, zTransform)
+            bx, by := corner(i, j, zTransform)
+            cx, cy := corner(i, j + 1, zTransform)
+            dx, dy := corner(i + 1, j + 1, zTransform)
 
             if math.IsNaN(ax + ay + bx + by + cx + cy + dx + dy) {
                 continue
@@ -39,11 +41,11 @@ func Write(out io.Writer) {
     fmt.Fprintf(out, "</svg>\n")
 }
 
-func corner(i, j int) (float64, float64) {
+func corner(i, j int, zTransform ZTransform) (float64, float64) {
     x := xyrange * (float64(i) / cells - 0.5)
     y := xyrange * (float64(j) / cells - 0.5)
 
-    z := f(x, y)
+    z := zTransform(x, y)
 
     sx := width / 2 + (x - y) * cos30 * xyscale
     sy := height / 2 + (x + y) * sin30 * xyscale - z * zscale
@@ -51,7 +53,18 @@ func corner(i, j int) (float64, float64) {
     return sx, sy
 }
 
-func f(x, y float64) float64 {
+func Peak(x, y float64) float64 {
     r := math.Hypot(x, y)
     return math.Sin(r) / r
 }
+
+func Saddle(x, y float64) float64 {
+    xaxis := -0.006 * x * x
+    yaxis := 0.001 * y * y
+    return xaxis + yaxis
+}
+
+func EggBox(x, y float64) float64 {
+    return 0.1 * (math.Cos(x) + math.Cos(y))
+}
+

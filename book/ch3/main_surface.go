@@ -10,5 +10,5 @@ func main() {
 }
 
 func writeToStdout() {
-    surface.Write(os.Stdout)
+    surface.Write(os.Stdout, surface.Saddle)
 }
