@@ -1,4 +1,4 @@
-package main
+package lissajous
 
 import (
     "image"
@@ -7,7 +7,6 @@ import (
     "io"
     "math"
     "math/rand"
-    "os"
 )
 
 var palette []color.Color = make([]color.Color, 256, 256)
@@ -19,11 +18,7 @@ func init() {
     }
 }
 
-func main() {
-    lissajous(os.Stdout)
-}
-
-func lissajous(out io.Writer) {
+func Draw(out io.Writer) {
     const (
         cycles  = 5
         res     = 0.001 // angular resolution
