@@ -18,9 +18,8 @@ func init() {
     }
 }
 
-func Draw(out io.Writer) {
+func Draw(cycles int, out io.Writer) {
     const (
-        cycles  = 5
         res     = 0.001 // angular resolution
         size    = 100   // image canvas covers [-size..+size]
         nframes = 64    // number of animation frames
@@ -33,7 +32,7 @@ func Draw(out io.Writer) {
         rect := image.Rect(0, 0, 2*size+1, 2*size+1)
         img := image.NewPaletted(rect, palette)
         colorIndex := 0
-        for t := 0.0; t < cycles*2*math.Pi; t += res {
+        for t := 0.0; t < float64(cycles)*2*math.Pi; t += res {
             x := math.Sin(t)
             y := math.Sin(t*freq + phase)
             img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5),
@@ -47,4 +46,3 @@ func Draw(out io.Writer) {
     }
     gif.EncodeAll(out, &anim) // NOTE: ignoring encoding errors
 }
-

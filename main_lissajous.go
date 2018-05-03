@@ -6,5 +6,5 @@ import (
 )
 
 func main() {
-    lissajous.Draw(os.Stdout)
+    lissajous.Draw(5, os.Stdout)
 }
