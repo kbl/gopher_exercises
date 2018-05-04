@@ -43,7 +43,6 @@ func startServer() {
             }
         }
 
-
         surface.Write(w, transform, width, height)
     })
     log.Fatal(http.ListenAndServe("localhost:8080", nil))
