@@ -7,32 +7,43 @@ import (
 )
 
 const (
-    width, height = 600, 320
-    cells = 100
-    xyrange = 30.0
-    xyscale = width / 2 / xyrange
-    zscale = height * 0.4
-    angle = math.Pi / 6
+    cells      = 100
+    xyrange    = 30.0
+    angle      = math.Pi / 6
     colorRange = 4 * 256
 )
+
+type drawingDetails struct {
+    width,
+    height,
+    xyscale,
+    zscale  float64
+}
 
 var sin30, cos30 = math.Sincos(angle)
 
 type ZTransform func(float64, float64) float64
 
-func Write(out io.Writer, zTransform ZTransform) {
+func Write(out io.Writer, zTransform ZTransform, width, height int) {
+    params := drawingDetails{
+        width:   float64(width),
+        height:  float64(height),
+        xyscale: float64(width) / 2 / xyrange,
+        zscale:  float64(height) * 0.4,
+    }
+
     fmt.Fprintf(out, "<svg xmlns='http://www.w3.org/2000/svg' " +
                "style='stroke: grey; fill: white; stroke-width: 0.7' " +
-               "width='%d' height='%d'>", width, height)
+               "width='%d' height='%d'>", params.width, params.height)
 
     zMin, zMax := findZRange(zTransform)
 
     for i := 0; i < cells; i++ {
         for j := 0; j < cells; j++ {
-            ax, ay, az := corner(i + 1, j, zTransform)
-            bx, by, bz := corner(i, j, zTransform)
-            cx, cy, cz := corner(i, j + 1, zTransform)
-            dx, dy, dz := corner(i + 1, j + 1, zTransform)
+            ax, ay, az := corner(i + 1, j,     params, zTransform)
+            bx, by, bz := corner(i,     j,     params, zTransform)
+            cx, cy, cz := corner(i,     j + 1, params, zTransform)
+            dx, dy, dz := corner(i + 1, j + 1, params, zTransform)
 
             color := findColor(zMin, zMax, (az + bz + cz + dz) / 4)
 
@@ -46,14 +57,14 @@ func Write(out io.Writer, zTransform ZTransform) {
     fmt.Fprintf(out, "</svg>\n")
 }
 
-func corner(i, j int, zTransform ZTransform) (float64, float64, float64) {
+func corner(i, j int, params drawingDetails, zTransform ZTransform) (float64, float64, float64) {
     x := xyrange * (float64(i) / cells - 0.5)
     y := xyrange * (float64(j) / cells - 0.5)
 
     z := zTransform(x, y)
 
-    sx := width / 2 + (x - y) * cos30 * xyscale
-    sy := height / 2 + (x + y) * sin30 * xyscale - z * zscale
+    sx := params.width / 2 + (x - y) * cos30 * params.xyscale
+    sy := params.height / 2 + (x + y) * sin30 * params.xyscale - z * params.zscale
 
     return sx, sy, z
 }
