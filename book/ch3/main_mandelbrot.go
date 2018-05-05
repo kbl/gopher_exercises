@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-	// mandelbrot.Draw(mandelbrot.Mandelbrot)
-	mandelbrot.Draw(mandelbrot.Newtons)
+	mandelbrot.Draw(mandelbrot.MandelbrotFloat)
+	// mandelbrot.Draw(mandelbrot.Newtons)
 }

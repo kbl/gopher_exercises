@@ -7,12 +7,12 @@ import (
 
 func TestAvgColors(t *testing.T) {
     colors := []color.Color {
-        color.RGBA {R: uint8(35), G: uint8(35), B: uint8(220), A: uint8(255)},
+        color.RGBA {R: 35, G: 35, B: 220, A: 255},
         color.Black,
         color.Black,
         color.Black,
     }
-    expected := color.RGBA{R: uint8(8), G: uint8(8), B: uint8(55), A: uint8(255)}
+    expected := color.RGBA{R: 8, G: 8, B: 55, A: 255}
 
     avg := avgColor(colors)
 

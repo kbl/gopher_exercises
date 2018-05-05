@@ -7,6 +7,7 @@ import (
     "math"
     "math/cmplx"
     "os"
+    "math/big"
 )
 
 const (
@@ -45,12 +46,12 @@ func Draw(f SetFunction) {
     png.Encode(os.Stdout, img)
 }
 
-func Mandelbrot(z complex128) color.Color {
+func Mandelbrot128(z complex128) color.Color {
     const iterations = len(palette)
 
     var v complex128
     for n := 0; n < iterations; n++ {
-        v = v * v * v * v + z
+        v = v * v + z
         if cmplx.Abs(v) > 2 {
             return palette[n]
         }
@@ -58,8 +59,113 @@ func Mandelbrot(z complex128) color.Color {
     return color.Black
 }
 
+func Mandelbrot64(z complex128) color.Color {
+    const iterations = len(palette)
+
+    var v complex64
+    z64 := complex64(z)
+
+    for n := 0; n < iterations; n++ {
+        v = v * v + z64
+        if cmplx.Abs(complex128(v)) > 2 {
+            return palette[n]
+        }
+    }
+    return color.Black
+}
+
+type ComplexFloat struct {
+    r, i *big.Float
+}
+
+func NewComplexFloat() *ComplexFloat {
+    cf := new(ComplexFloat)
+    cf.r = new(big.Float)
+    cf.i = new(big.Float)
+    return cf
+}
+
+func (z *ComplexFloat) Add(x, y *ComplexFloat) *ComplexFloat {
+    var r, i *big.Float = z.r, z.i
+
+    r.Add(x.r, y.r)
+    i.Add(x.i, y.i)
+
+    return z
+}
+
+func (z *ComplexFloat) Mul(x, y *ComplexFloat) *ComplexFloat {
+    var newR1 *big.Float = &big.Float{}
+    var newR2 *big.Float = &big.Float{}
+    var newI1 *big.Float = &big.Float{}
+    var newI2 *big.Float = &big.Float{}
+
+    var r, i *big.Float = z.r, z.i
+
+    newR1 = newR1.Mul(x.r, y.r)
+    newR2.Mul(x.i, y.i)
+    r.Sub(newR1, newR2)
+
+    newI1.Mul(x.r, y.i)
+    newI2.Mul(x.i, y.r)
+    i.Add(newI1, newI2)
+
+    return z
+}
+
+func (c *ComplexFloat) Abs() *big.Float {
+    var f1 *big.Float = &big.Float{}
+    var f2 *big.Float = &big.Float{}
+
+    f1.Mul(c.r, c.r)
+    f2.Mul(c.i, c.i)
+    f1.Add(f1, f2)
+
+    return f1.Sqrt(f1)
+}
+
+func MandelbrotFloat(z complex128) color.Color {
+    const iterations = len(palette)
+
+    var v *ComplexFloat = NewComplexFloat()
+    var zFloat *ComplexFloat = &ComplexFloat {big.NewFloat(real(z)), big.NewFloat(imag(z))}
+
+    for n := 0; n < iterations; n++ {
+        v = v.Mul(v, v)
+        v = v.Add(v, zFloat)
+        if x, _ := v.Abs().Float64(); x > 2 {
+            return palette[n]
+        }
+    }
+    return color.Black
+}
+
+
+// type ComplexRat struct {
+//     r, i big.Rat
+// }
+//
+// func (c1 ComplexRat) Add(c2 ComplexRat) ComplexRat {
+//     return ComplexRat {
+//         c1.r + c2.r,
+//         c1.i + c2.i,
+//     }
+// }
+// 
+// func (c1 ComplexRat) Mul(c2 ComplexRat) ComplexRat {
+//     return ComplexRat {
+//         c1.r * c2.r - c1.i * c2.i,
+//         c1.r * c2.i + c1.i * c2.r,
+//     }
+// }
+// 
+// func (c ComplexRat) Abs() big.Rat {
+//     return sqrt(c.r * c.r + c.i * c.i)
+// }
+
+
 func Newtons(z complex128) color.Color {
-    const iterations = 200
+    const iterations = 25
     const tolerance = 0.0001
 
     roots := []complex128 {
@@ -70,17 +176,40 @@ func Newtons(z complex128) color.Color {
     }
 
     rootColors := []color.Color {
-        color.RGBA {R: 0, G: uint8(255), B: uint8(255), A: uint8(255)},
-        color.RGBA {R: uint8(255), G: uint8(255), B: 0, A: uint8(255)},
-        color.RGBA {R: uint8(255), G: 0, B: uint8(255), A: uint8(255)},
-        color.Black,
+        color.RGBA {R: 0,   G: 255, B: 255, A: 255},
+        color.RGBA {R: 255, G: 255, B: 0,   A: 255},
+        color.RGBA {R: 255, G: 0,   B: 255, A: 255},
+        color.RGBA {R: 255, G: 0,   B: 0,   A: 255},
+    }
+
+    shade := func(c color.Color, i int) color.Color {
+        var shade uint8 = uint8(float64(i) / float64(iterations) * 255)
+        r, g, b, a := c.RGBA()
+        r8 := uint8(r)
+        g8 := uint8(g)
+        b8 := uint8(b)
+        if r8 != 0 {
+            r8 -= shade
+        }
+        if g8 != 0 {
+            g8 -= shade
+        }
+        if b8 != 0 {
+            b8 -= shade
+        }
+        return color.RGBA {
+            R: r8,
+            G: g8,
+            B: b8,
+            A: uint8(a),
+        }
     }
 
     for n := 0; n < iterations; n++ {
         z -= (cmplx.Pow(z, 4) - 1) / (3 * cmplx.Pow(z, 3))
         for i, root := range roots {
             if cmplx.Abs(root - z) < tolerance {
-                return rootColors[i]
+                return shade(rootColors[i], n)
             }
         }
     }
