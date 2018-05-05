@@ -1,10 +1,10 @@
 package main
 
 import (
-    "os"
-    "book/ch1/lissajous"
+	"book/ch1/lissajous"
+	"os"
 )
 
 func main() {
-    lissajous.Draw(5, os.Stdout)
+	lissajous.Draw(5, os.Stdout)
 }
