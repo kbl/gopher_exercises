@@ -7,7 +7,6 @@ import (
     "math"
     "math/cmplx"
     "os"
-    "fmt"
 )
 
 const (
@@ -77,27 +76,13 @@ func supersampled(x, y float64) color.Color {
 func avgColor(colors []color.Color) color.Color {
     var r, g, b, a uint32
 
-    fmt.Println(r, g, b, a)
-
     for _, c := range colors {
-        var rTemp, gTemp, bTemp, aTemp uint32 = c.RGBA()
-        var rTemp, gTemp, bTemp, aTemp uint32 = c.RGBA()
-        r += uint8(rTemp)
-        g += uint8(gTemp)
-        b += uint8(bTemp)
-        a += uint8(aTemp)
-        fmt.Println("c ", c)
-        fmt.Println("cr", r, rTemp, float64(rTemp), uint8(rTemp))
-        fmt.Println("cg", g, gTemp, float64(gTemp), uint8(rTemp))
-        fmt.Println("cb", b, bTemp, float64(bTemp), uint8(rTemp))
-        fmt.Println("ca", a, aTemp, float64(aTemp), uint8(rTemp))
-        fmt.Println()
+        rTemp, gTemp, bTemp, aTemp := c.RGBA()
+        r += uint32(uint8(rTemp))
+        g += uint32(uint8(gTemp))
+        b += uint32(uint8(bTemp))
+        a += uint32(uint8(aTemp))
     }
-
-    fmt.Println("r", uint8(r / uint32(len(colors))), r / uint32(len(colors)))
-    fmt.Println("g", uint8(g / uint32(len(colors))), g / uint32(len(colors)))
-    fmt.Println("b", uint8(b / uint32(len(colors))), b / uint32(len(colors)))
-    fmt.Println("a", uint8(a / uint32(len(colors))), a / uint32(len(colors)))
 
     return color.RGBA{
         R: uint8(r / uint32(len(colors))),
