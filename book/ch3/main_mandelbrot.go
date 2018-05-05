@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-    mandelbrot.Draw()
+    mandelbrot.Draw(mandelbrot.Mandelbrot)
 }
