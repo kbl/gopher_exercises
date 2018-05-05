@@ -7,7 +7,6 @@ import (
     "math"
     "math/cmplx"
     "os"
-    "fmt"
 )
 
 const (
@@ -49,27 +48,6 @@ func Draw(f SetFunction) {
 func Mandelbrot(z complex128) color.Color {
     const iterations = len(palette)
 
-    roots := []complex128 {
-        1,
-        -1,
-        1i,
-        -1i
-    }
-
-    rootColors := []color.Color {
-        // Cyan	(1,0,0,0)	#00FFFF
-        color.RGBA {R: uint8(255), G: uint8(255), B: 0, uint8(255)},
-        // Magenta	(0,1,0,0)	#FF00FF
-        color.Black
-    }
-
-    fmt.Println(roots, rootColors)
-    return color.Black
-}
-
-func Newtons(z complex128) color.Color {
-    const iterations = len(palette)
-
     var v complex128
     for n := 0; n < iterations; n++ {
         v = v * v * v * v + z
@@ -80,17 +58,34 @@ func Newtons(z complex128) color.Color {
     return color.Black
 }
 
-func newtons(z complex128) color.Color {
-    const iterations = len(palette)
+func Newtons(z complex128) color.Color {
+    const iterations = 200
+    const tolerance = 0.0001
 
-    var v complex128
+    roots := []complex128 {
+        1,
+        -1,
+        1i,
+        -1i,
+    }
+
+    rootColors := []color.Color {
+        color.RGBA {R: 0, G: uint8(255), B: uint8(255), A: uint8(255)},
+        color.RGBA {R: uint8(255), G: uint8(255), B: 0, A: uint8(255)},
+        color.RGBA {R: uint8(255), G: 0, B: uint8(255), A: uint8(255)},
+        color.Black,
+    }
+
     for n := 0; n < iterations; n++ {
-        v = v * v + z
-        if cmplx.Abs(v) > 2 {
-            return palette[n]
+        z -= (cmplx.Pow(z, 4) - 1) / (3 * cmplx.Pow(z, 3))
+        for i, root := range roots {
+            if cmplx.Abs(root - z) < tolerance {
+                return rootColors[i]
+            }
         }
     }
-    return color.Black
+
+    return color.White
 }
 
 func supersampled(x, y float64, f SetFunction) color.Color {

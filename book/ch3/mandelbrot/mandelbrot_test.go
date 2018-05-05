@@ -3,7 +3,6 @@ package mandelbrot
 import (
     "testing"
     "image/color"
-    "fmt"
 )
 
 func TestAvgColors(t *testing.T) {

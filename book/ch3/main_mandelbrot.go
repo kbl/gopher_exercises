@@ -1,9 +1,10 @@
 package main
 
 import (
-    "book/ch3/mandelbrot"
+	"book/ch3/mandelbrot"
 )
 
 func main() {
-    mandelbrot.Draw(mandelbrot.Mandelbrot)
+	// mandelbrot.Draw(mandelbrot.Mandelbrot)
+	mandelbrot.Draw(mandelbrot.Newtons)
 }
