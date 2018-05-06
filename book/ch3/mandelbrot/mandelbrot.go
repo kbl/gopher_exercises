@@ -74,61 +74,14 @@ func Mandelbrot64(z complex128) color.Color {
     return color.Black
 }
 
-type ComplexFloat struct {
-    r, i *big.Float
-}
-
-func NewComplexFloat() *ComplexFloat {
-    cf := new(ComplexFloat)
-    cf.r = new(big.Float)
-    cf.i = new(big.Float)
-    return cf
-}
-
-func (z *ComplexFloat) Add(x, y *ComplexFloat) *ComplexFloat {
-    var r, i *big.Float = z.r, z.i
-
-    r.Add(x.r, y.r)
-    i.Add(x.i, y.i)
-
-    return z
-}
-
-func (z *ComplexFloat) Mul(x, y *ComplexFloat) *ComplexFloat {
-    var newR1 *big.Float = &big.Float{}
-    var newR2 *big.Float = &big.Float{}
-    var newI1 *big.Float = &big.Float{}
-    var newI2 *big.Float = &big.Float{}
-
-    var r, i *big.Float = z.r, z.i
-
-    newR1 = newR1.Mul(x.r, y.r)
-    newR2.Mul(x.i, y.i)
-    r.Sub(newR1, newR2)
-
-    newI1.Mul(x.r, y.i)
-    newI2.Mul(x.i, y.r)
-    i.Add(newI1, newI2)
-
-    return z
-}
-
-func (c *ComplexFloat) Abs() *big.Float {
-    var f1 *big.Float = &big.Float{}
-    var f2 *big.Float = &big.Float{}
-
-    f1.Mul(c.r, c.r)
-    f2.Mul(c.i, c.i)
-    f1.Add(f1, f2)
-
-    return f1.Sqrt(f1)
-}
-
 func MandelbrotFloat(z complex128) color.Color {
     const iterations = len(palette)
 
     var v *ComplexFloat = NewComplexFloat()
-    var zFloat *ComplexFloat = &ComplexFloat {big.NewFloat(real(z)), big.NewFloat(imag(z))}
+    var zFloat *ComplexFloat = &ComplexFloat {
+        big.NewFloat(real(z)),
+        big.NewFloat(imag(z)),
+    }
 
     for n := 0; n < iterations; n++ {
         v = v.Mul(v, v)
