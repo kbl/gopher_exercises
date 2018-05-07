@@ -1,3 +1,5 @@
+package mandelbrot
+
 // type ComplexRat struct {
 //     r, i big.Rat
 // }

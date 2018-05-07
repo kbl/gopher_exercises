@@ -6,8 +6,8 @@ import (
     "image/png"
     "math"
     "math/cmplx"
-    "os"
     "math/big"
+    "io"
 )
 
 const (
@@ -33,7 +33,7 @@ func init() {
     }
 }
 
-func Draw(f SetFunction) {
+func Draw(out io.Writer, f SetFunction) {
     img := image.NewRGBA(image.Rect(0, 0, width, height))
     for py := 0; py < height; py++ {
         y := float64(py) / height * yrange + ymin
@@ -43,7 +43,7 @@ func Draw(f SetFunction) {
             img.Set(px, py, c)
         }
     }
-    png.Encode(os.Stdout, img)
+    png.Encode(out, img)
 }
 
 func Mandelbrot128(z complex128) color.Color {
