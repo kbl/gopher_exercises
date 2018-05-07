@@ -11,15 +11,29 @@ import (
 )
 
 const (
-    xmin   = -2
-    ymin   = -2
-    xmax   = 2
-    ymax   = 2
+    xmin   = -3
+    ymin   = -3
+    xmax   = -2
+    ymax   = -2
     width  = 1024
     height = 1024
-    xrange = xmax - xmin
-    yrange = ymax - ymin
 )
+
+type CanvasDetails struct {
+    Zoom,
+    Xmin,
+    Xmax,
+    Ymin,
+    Ymax float64
+}
+
+func (cd CanvasDetails) Xrange() float64 {
+    return (cd.Xmax - cd.Xmin) / cd.Zoom
+}
+
+func (cd CanvasDetails) Yrange() float64 {
+    return (cd.Ymax - cd.Ymin) / cd.Zoom
+}
 
 type SetFunction func(complex128) color.Color
 
@@ -33,13 +47,18 @@ func init() {
     }
 }
 
-func Draw(out io.Writer, f SetFunction) {
+func Draw(out io.Writer, f SetFunction, canvas CanvasDetails) {
+    xrange := canvas.Xrange()
+    yrange := canvas.Yrange()
+    xmin := canvas.Xmin
+    ymin := canvas.Ymin
+
     img := image.NewRGBA(image.Rect(0, 0, width, height))
     for py := 0; py < height; py++ {
         y := float64(py) / height * yrange + ymin
         for px := 0; px < width; px++ {
             x := float64(px) / width * xrange + xmin
-            c := supersampled(x, y, f)
+            c := supersampled(x, y, xrange, yrange, f)
             img.Set(px, py, c)
         }
     }
@@ -146,7 +165,7 @@ func Newtons(z complex128) color.Color {
     return color.White
 }
 
-func supersampled(x, y float64, f SetFunction) color.Color {
+func supersampled(x, y, xrange, yrange float64, f SetFunction) color.Color {
     xDif := 0.5 / width * xrange
     yDif := 0.5 / height * yrange
 
