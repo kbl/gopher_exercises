@@ -1,7 +1,7 @@
 package main
 
 import (
-	"book/ch1/fetch"
+	"book/ch01/fetch"
 	"fmt"
 	"os"
 )

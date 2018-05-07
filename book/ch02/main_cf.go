@@ -1,7 +1,7 @@
 package main
 
 import (
-	"book/ch2/conv"
+	"book/ch02/conv"
 	"bufio"
 	"fmt"
 	"log"

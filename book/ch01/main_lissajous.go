@@ -1,7 +1,7 @@
 package main
 
 import (
-	"book/ch1/lissajous"
+	"book/ch01/lissajous"
 	"os"
 )
 

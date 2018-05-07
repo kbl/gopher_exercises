@@ -1,7 +1,7 @@
 package main
 
 import (
-	"book/ch3/mandelbrot"
+	"book/ch03/mandelbrot"
 )
 
 func main() {

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"book/ch3/comma"
+	"book/ch03/comma"
 	"fmt"
 )
 

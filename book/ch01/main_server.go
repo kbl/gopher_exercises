@@ -1,6 +1,6 @@
 package main
 
-import "book/ch1/server"
+import "book/ch01/server"
 
 func main() {
 	server.Start()

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"book/ch3/surface"
+	"book/ch03/surface"
 	"log"
 	"net/http"
 	"os"
