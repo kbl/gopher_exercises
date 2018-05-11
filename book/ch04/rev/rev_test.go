@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestRewEmptySlice(t *testing.T) {
+func TestRevEmptySlice(t *testing.T) {
 	input := []int{}
 	before := []int{}
 	expected := []int{}
@@ -16,7 +16,7 @@ func TestRewEmptySlice(t *testing.T) {
 	}
 }
 
-func TestRewNilSlice(t *testing.T) {
+func TestRevNilSlice(t *testing.T) {
 	var input []int
 	var before []int
 	var expected []int
@@ -27,7 +27,7 @@ func TestRewNilSlice(t *testing.T) {
 	}
 }
 
-func TestRewOddLengthSlice(t *testing.T) {
+func TestRevOddLengthSlice(t *testing.T) {
 	input := []int{1, 2, 3}
 	before := []int{1, 2, 3}
 	expected := []int{3, 2, 1}
@@ -38,7 +38,7 @@ func TestRewOddLengthSlice(t *testing.T) {
 	}
 }
 
-func TestRewEvenLengthSlice(t *testing.T) {
+func TestRevEvenLengthSlice(t *testing.T) {
 	input := []int{1, 2, 3, 4}
 	before := []int{1, 2, 3, 4}
 	expected := []int{4, 3, 2, 1}
