@@ -48,3 +48,14 @@ func TestRevEvenLengthSlice(t *testing.T) {
 		t.Errorf("Rev(%v) = %v, want %v", before, input, expected)
 	}
 }
+
+func TestRevArrayEvenLengthSlice(t *testing.T) {
+	input := [...]int{1, 2, 3, 4}
+	before := [...]int{1, 2, 3, 4}
+	expected := [...]int{4, 3, 2, 1}
+	RevArray(&input)
+
+	if !reflect.DeepEqual(input, expected) {
+		t.Errorf("RevArray(%v) = %v, want %v", before, input, expected)
+	}
+}
