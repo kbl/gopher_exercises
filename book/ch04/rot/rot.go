@@ -6,7 +6,6 @@ func Rot(s []int, by int) {
 	if by > len(s) {
 		return
 	}
-	rev.Rev(s[by:])
-	rev.Rev(s[:by])
-	rev.Rev(s)
+	for i, v := range s {
+	}
 }
