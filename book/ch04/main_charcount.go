@@ -12,6 +12,10 @@ func main() {
 	for r, c := range stats.Runes {
 		fmt.Printf("%q\t%d\n", r, c)
 	}
+	fmt.Printf("\nletter\tcount\n")
+	for r, c := range stats.Letters {
+		fmt.Printf("%q\t%d\n", r, c)
+	}
 	fmt.Printf("\nlength\tcount\n")
 	for l, c := range stats.Lenghts {
 		fmt.Printf("%d\t%d\n", l, c)
