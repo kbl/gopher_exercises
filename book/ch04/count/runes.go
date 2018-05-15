@@ -32,7 +32,7 @@ func Runes(input io.Reader) RuneStats {
 			break
 		}
 		if err != nil {
-			log.Fatalf("Count: %v\n", err)
+			log.Fatalf("Runes: %v\n", err)
 		}
 		if r == unicode.ReplacementChar && n == 1 {
 			ret.Invalid++
