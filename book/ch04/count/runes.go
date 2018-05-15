@@ -1,4 +1,4 @@
-package charcount
+package count
 
 import (
 	"bufio"
@@ -8,7 +8,7 @@ import (
 	"unicode/utf8"
 )
 
-type Stats struct {
+type RuneStats struct {
 	Runes    map[rune]int
 	Lenghts  [utf8.UTFMax + 1]int
 	Invalid  int
@@ -17,8 +17,8 @@ type Stats struct {
 	Graphics map[rune]int
 }
 
-func Count(input io.Reader) Stats {
-	ret := Stats{
+func Runes(input io.Reader) RuneStats {
+	ret := RuneStats{
 		Runes:    make(map[rune]int),
 		Letters:  make(map[rune]int),
 		Digits:   make(map[rune]int),

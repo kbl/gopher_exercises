@@ -1,13 +1,13 @@
 package main
 
 import (
-	"book/ch04/charcount"
+	"book/ch04/count"
 	"fmt"
 	"strings"
 )
 
 func main() {
-	stats := charcount.Count(strings.NewReader("zażółć gęślą jaźń"))
+	stats := count.Runes(strings.NewReader("zażółć gęślą jaźń"))
 	fmt.Printf("rune\tcount\n")
 	for r, c := range stats.Runes {
 		fmt.Printf("%q\t%d\n", r, c)
