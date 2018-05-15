@@ -20,17 +20,15 @@ func Words(input io.Reader) WordStats {
 
 	in := bufio.NewScanner(input)
 	in.Split(bufio.ScanWords)
-	for {
-		if in.Scan() {
-			w := in.Text()
-			ret.Words[w]++
-			ret.Lenghts[utf8.RuneCountInString(w)]++
-			continue
-		}
-		err := in.Err()
-		if err == nil {
-			break
-		}
+
+	for in.Scan() {
+		w := in.Text()
+		ret.Words[w]++
+		ret.Lenghts[utf8.RuneCountInString(w)]++
+	}
+
+	err := in.Err()
+	if err != nil {
 		log.Fatalf("words: %v\n", err)
 	}
 
