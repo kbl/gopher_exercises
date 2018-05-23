@@ -2,6 +2,7 @@ package vim
 
 import (
 	"io/ioutil"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -56,4 +57,12 @@ func readFile(path string) (string, error) {
 	}
 	content := string(out)
 	return content[:strings.LastIndex(content, "\n")], nil
+}
+
+func Prompt(message string) string {
+	content, err := Edit(message)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return content
 }

@@ -1,7 +1,8 @@
 package github
 
 import (
-	// "encoding/json"
+	"book/ch04/vim"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -9,7 +10,10 @@ import (
 	"net/http"
 )
 
-const endpointTemplate = "https://api.github.com/repos/%s/%s/issues"
+const (
+	creteURLTemplate = "https://api.github.com/repos/%s/%s/issues"
+	editURLTemplate  = "https://api.github.com/repos/%s/%s/issues/%d"
+)
 
 const acceptHeader = "application/vnd.github.v3+json"
 
@@ -51,16 +55,28 @@ type Client struct {
 
 func NewClient(repository *Repository, token string) *Client {
 	return &Client{
-		endpoint: fmt.Sprintf(endpointTemplate, repository.Owner, repository.Name),
+		endpoint: fmt.Sprintf(creteURLTemplate, repository.Owner, repository.Name),
 		token:    token,
 		client:   &http.Client{},
 	}
 }
 
 func (c *Client) Create(title, content string) {
-	var body io.Reader
+	var body io.ReadWriter
+	json.NewEncoder(body).Encode(NewIssue{Body: content, Title: title})
 	response := c.post(body)
 	fmt.Println(response)
+}
+
+func (c *Client) Edit(id int) {
+	issue := c.View(id)
+	title := vim.Prompt(issue.Title)
+	body := vim.Prompt(issue.Body)
+	fmt.Println(title, body)
+}
+
+func (c *Client) View(id int) *GithubIssue {
+	return nil
 }
 
 func (c *Client) post(body io.Reader) *http.Response {
@@ -79,13 +95,13 @@ func (c *Client) post(body io.Reader) *http.Response {
 	return response
 }
 
-// type Issue struct {
-// 	Title     string
-// 	Body      string
-// 	Assignees []string
-// 	Milestone int
-// 	Labels    []string
-// }
+type GithubIssue struct {
+	Title     string
+	Body      string
+	Assignees []string
+	Milestone int
+	Labels    []string
+}
 
 /*
 POST /repos/:owner/:repo/issues

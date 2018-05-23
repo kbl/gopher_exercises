@@ -32,17 +32,10 @@ func main() {
 	}
 
 	if action == github.CREATE {
-		// create.Create(prompt("<title>"), prompt("<body>"))
-		client.Create("<title>", "<body>")
+		// create.Create(vim.Prompt("<title>"), vim.Prompt("<body>"))
+		// client.Create("<title>", "<body>")
+		fmt.Println(client)
 	}
 
-	fmt.Println(apiToken, userName, repoName, action)
-}
-
-func prompt(message string) string {
-	content, err := vim.Edit(message)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return content
+	ni := github.NewIssue{Body: "bodyy", Title: "titlee"}
 }
