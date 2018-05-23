@@ -1,15 +1,17 @@
 package github
 
 import (
+	// "encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"log"
-	// "net/http"
-	"book/ch04/vim"
+	"net/http"
 )
 
-const graphQLEndpoint = "https://api.github.com/graphql"
+const endpointTemplate = "https://api.github.com/repos/%s/%s/issues"
+
+const acceptHeader = "application/vnd.github.v3+json"
 
 type Action int
 
@@ -33,11 +35,48 @@ func ToAction(name string) (Action, error) {
 	return -1, errors.New(fmt.Sprintf("Unknown action %s.", name))
 }
 
-type GraphQLClient struct {
-	token string
+type Repository struct {
+	Name, Owner string
 }
 
-func (c *GraphQLClient) Create() {
+type NewIssue struct {
+	Body, Title string
+}
+
+type Client struct {
+	endpoint string
+	token    string
+	client   *http.Client
+}
+
+func NewClient(repository *Repository, token string) *Client {
+	return &Client{
+		endpoint: fmt.Sprintf(endpointTemplate, repository.Owner, repository.Name),
+		token:    token,
+		client:   &http.Client{},
+	}
+}
+
+func (c *Client) Create(title, content string) {
+	var body io.Reader
+	response := c.post(body)
+	fmt.Println(response)
+}
+
+func (c *Client) post(body io.Reader) *http.Response {
+	fmt.Println(c.endpoint)
+	request, err := http.NewRequest("POST", c.endpoint, body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	request.Header.Add("Accept", acceptHeader)
+	request.Header.Add("Authorization", c.token)
+
+	response, err := c.client.Do(request)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return response
 }
 
 // type Issue struct {
@@ -47,33 +86,6 @@ func (c *GraphQLClient) Create() {
 // 	Milestone int
 // 	Labels    []string
 // }
-
-func main() {
-	owner := "kbl"
-	repo := "gopher_exercises"
-	url := fmt.Sprintf(issuesAPIURL, owner, repo)
-	var requestBody io.Reader
-
-	body := prompt("<type issue body here>")
-	title := prompt("<type issue title here>")
-
-	fmt.Println(url)
-	fmt.Println(requestBody, body, title)
-	/* response, err := http.Post(url, "application/json", requestBody)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(response)
-	*/
-}
-
-func prompt(message string) string {
-	content, err := vim.Edit(message)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return content
-}
 
 /*
 POST /repos/:owner/:repo/issues

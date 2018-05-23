@@ -2,6 +2,7 @@ package main
 
 import (
 	"book/ch04/github"
+	"book/ch04/vim"
 	"fmt"
 	"log"
 	"os"
@@ -12,14 +13,36 @@ func main() {
 		log.Fatalf("Usage: %s <api token> <username> <repository> <action>", os.Args[0])
 	}
 	apiToken := os.Args[1]
-	username := os.Args[2]
-	repository := os.Args[3]
-	action := os.Args[4]
+	userName := os.Args[2]
+	repoName := os.Args[3]
+	actionName := os.Args[4]
 
-	x, err := github.ToAction(action)
+	client := github.NewClient(
+		&github.Repository{
+			Name:  repoName,
+			Owner: userName,
+		},
+		apiToken,
+	)
+
+	action, err := github.ToAction(actionName)
+
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println(apiToken, username, repository, action, x)
+	if action == github.CREATE {
+		// create.Create(prompt("<title>"), prompt("<body>"))
+		client.Create("<title>", "<body>")
+	}
+
+	fmt.Println(apiToken, userName, repoName, action)
+}
+
+func prompt(message string) string {
+	content, err := vim.Edit(message)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return content
 }
