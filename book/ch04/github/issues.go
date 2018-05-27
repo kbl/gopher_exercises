@@ -23,15 +23,15 @@ type Action int
 const (
 	CREATE Action = iota
 	READ
-	UPDATE
-	DELETE
+	EDIT
+	CLOSE
 )
 
 func ToAction(name string) (Action, error) {
-	if name == "update" {
-		return UPDATE, nil
-	} else if name == "delete" {
-		return DELETE, nil
+	if name == "edit" {
+		return EDIT, nil
+	} else if name == "close" {
+		return CLOSE, nil
 	} else if name == "create" {
 		return CREATE, nil
 	} else if name == "read" {
@@ -44,12 +44,7 @@ type Repository struct {
 	Name, Owner string
 }
 
-type createGithubIssue struct {
-	Title string `json:"title"`
-	Body  string `json:"body"`
-}
-
-type ReadGithubIssue struct {
+type GithubIssue struct {
 	Title string `json:"title"`
 	Body  string `json:"body"`
 	State string `json:"state"`
@@ -69,17 +64,17 @@ func NewClient(repository *Repository, token string) *Client {
 	}
 }
 
-func (c *Client) Read(issueId int) *ReadGithubIssue {
+func (c *Client) Read(issueId int) *GithubIssue {
 	url := fmt.Sprintf("%s/%d", c.endpoint, issueId)
 	response := c.request("GET", url, nil)
-	result := new(ReadGithubIssue)
+	result := new(GithubIssue)
 	json.NewDecoder(response.Body).Decode(result)
 	return result
 }
 
-func (c *Client) Create(title, content string) int {
+func (c *Client) Create(title, description string) int {
 	var body bytes.Buffer
-	json.NewEncoder(&body).Encode(createGithubIssue{Body: content, Title: title})
+	json.NewEncoder(&body).Encode(GithubIssue{Body: description, Title: title})
 	response := c.request("POST", c.endpoint, &body)
 	locationURL, err := response.Location()
 	if err != nil {
@@ -93,11 +88,18 @@ func (c *Client) Create(title, content string) int {
 	return id
 }
 
-func (c *Client) Update(id int) {
-	issue := c.Read(id)
+func (c *Client) Edit(issueId int) {
+	issue := c.Read(issueId)
 	title := vim.Prompt(issue.Title)
-	body := vim.Prompt(issue.Body)
-	fmt.Println(title, body)
+	description := vim.Prompt(issue.Body)
+
+	var body bytes.Buffer
+	url := fmt.Sprintf("%s/%d", c.endpoint, issueId)
+	json.NewEncoder(&body).Encode(GithubIssue{Body: description, Title: title})
+
+	response := c.request("PATCH", url, &body)
+
+	fmt.Println(response.Body)
 }
 
 func (c *Client) request(requestType, url string, requestBody io.Reader) *http.Response {

@@ -35,12 +35,20 @@ func main() {
 		id := client.Create(vim.Prompt("<title>"), vim.Prompt("<body>"))
 		fmt.Printf("New issue with id %d was created.\n", id)
 	} else if action == github.READ {
-		fmt.Print("Podaj id: ")
-		var issueId int
-		_, err := fmt.Scanf("%d", &issueId)
-		if err != nil {
-			log.Fatal(err)
-		}
-		client.Read(issueId)
+		issueId := promptInt("Podaj id: ")
+		fmt.Println(*client.Read(issueId))
+	} else if action == github.EDIT {
+		issueId := promptInt("Podaj id: ")
+		client.Edit(issueId)
 	}
+}
+
+func promptInt(prompt string) int {
+	fmt.Print("Podaj id: ")
+	var number int
+	_, err := fmt.Scanf("%d", &number)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return number
 }
