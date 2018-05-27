@@ -32,10 +32,15 @@ func main() {
 	}
 
 	if action == github.CREATE {
-		// create.Create(vim.Prompt("<title>"), vim.Prompt("<body>"))
-		// client.Create("<title>", "<body>")
-		fmt.Println(client)
+		id := client.Create(vim.Prompt("<title>"), vim.Prompt("<body>"))
+		fmt.Printf("New issue with id %d was created.\n", id)
+	} else if action == github.READ {
+		fmt.Print("Podaj id: ")
+		var issueId int
+		_, err := fmt.Scanf("%d", &issueId)
+		if err != nil {
+			log.Fatal(err)
+		}
+		client.Read(issueId)
 	}
-
-	ni := github.NewIssue{Body: "bodyy", Title: "titlee"}
 }
