@@ -90,16 +90,33 @@ func (c *Client) Create(title, description string) int {
 
 func (c *Client) Edit(issueId int) {
 	issue := c.Read(issueId)
-	title := vim.Prompt(issue.Title)
-	description := vim.Prompt(issue.Body)
+	issue.Title = vim.Prompt(issue.Title)
+	issue.Body = vim.Prompt(issue.Body)
 
 	var body bytes.Buffer
 	url := fmt.Sprintf("%s/%d", c.endpoint, issueId)
-	json.NewEncoder(&body).Encode(GithubIssue{Body: description, Title: title})
+	json.NewEncoder(&body).Encode(issue)
 
 	response := c.request("PATCH", url, &body)
 
-	fmt.Println(response.Body)
+	if response.StatusCode != http.StatusOK {
+		log.Fatalf("something went wrong during editing an issue %v", response)
+	}
+}
+
+func (c *Client) Close(issueId int) {
+	issue := c.Read(issueId)
+	issue.State = "closed"
+
+	var body bytes.Buffer
+	url := fmt.Sprintf("%s/%d", c.endpoint, issueId)
+	json.NewEncoder(&body).Encode(issue)
+
+	response := c.request("PATCH", url, &body)
+
+	if response.StatusCode != http.StatusOK {
+		log.Fatalf("something went wrong during closing an issue %v", response)
+	}
 }
 
 func (c *Client) request(requestType, url string, requestBody io.Reader) *http.Response {

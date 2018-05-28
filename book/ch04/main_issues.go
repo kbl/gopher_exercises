@@ -40,6 +40,9 @@ func main() {
 	} else if action == github.EDIT {
 		issueId := promptInt("Podaj id: ")
 		client.Edit(issueId)
+	} else if action == github.CLOSE {
+		issueId := promptInt("Podaj id: ")
+		client.Close(issueId)
 	}
 }
 
