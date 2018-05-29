@@ -67,6 +67,7 @@ func NewClient(repository *Repository, token string) *Client {
 func (c *Client) Read(issueId int) *GithubIssue {
 	url := fmt.Sprintf("%s/%d", c.endpoint, issueId)
 	response := c.request("GET", url, nil)
+	defer response.Body.Close()
 	result := new(GithubIssue)
 	json.NewDecoder(response.Body).Decode(result)
 	return result
@@ -76,6 +77,7 @@ func (c *Client) Create(title, description string) int {
 	var body bytes.Buffer
 	json.NewEncoder(&body).Encode(GithubIssue{Body: description, Title: title})
 	response := c.request("POST", c.endpoint, &body)
+	defer response.Body.Close()
 	locationURL, err := response.Location()
 	if err != nil {
 		log.Fatal(err)
@@ -98,6 +100,7 @@ func (c *Client) Edit(issueId int) {
 	json.NewEncoder(&body).Encode(issue)
 
 	response := c.request("PATCH", url, &body)
+	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
 		log.Fatalf("something went wrong during editing an issue %v", response)
@@ -113,6 +116,7 @@ func (c *Client) Close(issueId int) {
 	json.NewEncoder(&body).Encode(issue)
 
 	response := c.request("PATCH", url, &body)
+	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
 		log.Fatalf("something went wrong during closing an issue %v", response)
