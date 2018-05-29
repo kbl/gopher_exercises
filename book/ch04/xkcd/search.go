@@ -27,8 +27,8 @@ func Search(archiveDirectory, searchTerm string) []*Comic {
 		json.NewDecoder(handle).Decode(&comic)
 		handle.Close()
 
-		transcriptMatches := strings.Index(searchTerm, strings.ToLower(comic.Transcript)) != -1
-		titleMatches := strings.Index(searchTerm, strings.ToLower(comic.Title)) != -1
+		transcriptMatches := strings.Index(strings.ToLower(comic.Transcript), searchTerm) != -1
+		titleMatches := strings.Index(strings.ToLower(comic.Title), searchTerm) != -1
 
 		if transcriptMatches || titleMatches {
 			comics = append(comics, &comic)
