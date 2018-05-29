@@ -11,23 +11,6 @@ import (
 	"strconv"
 )
 
-const indexURL = "https://xkcd.com/info.0.json"
-const comicURLTemplate = "http://xkcd.com/%d/info.0.json"
-
-type Comic struct {
-	Month      string `json:"month"`
-	Num        int    `json:"num"`
-	Link       string `json:"link"`
-	Year       string `json:"year"`
-	News       string `json:"news"`
-	SafeTitle  string `json:"safe_title"`
-	Transcript string `json:"transcript"`
-	Alt        string `json:"alt"`
-	Img        string `json:"img"`
-	Title      string `json:"title"`
-	Day        string `json:"day"`
-}
-
 func ensureExists(archiveDirectory string) {
 	if _, err := os.Stat(archiveDirectory); err == nil {
 		return // dir exists
@@ -46,8 +29,6 @@ func ArchiveTo(archiveDirectory string) {
 		comic := DownloadIssue(comicId)
 		saveInArchive(archiveDirectory, comic)
 	}
-
-	fmt.Println(missingIds)
 }
 
 func saveInArchive(archiveDirectory string, comic *Comic) {
