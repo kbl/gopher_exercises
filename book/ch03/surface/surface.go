@@ -57,16 +57,16 @@ func Write(out io.Writer, zTransform ZTransform, width, height int) {
 	fmt.Fprintf(out, "</svg>\n")
 }
 
-func corner(i, j int, params drawingDetails, zTransform ZTransform) (float64, float64, float64) {
+func corner(i, j int, params drawingDetails, zTransform ZTransform) (sx, sy, z float64) {
 	x := xyrange * (float64(i)/cells - 0.5)
 	y := xyrange * (float64(j)/cells - 0.5)
 
-	z := zTransform(x, y)
+	z = zTransform(x, y)
 
-	sx := params.width/2 + (x-y)*cos30*params.xyscale
-	sy := params.height/2 + (x+y)*sin30*params.xyscale - z*params.zscale
+	sx = params.width/2 + (x-y)*cos30*params.xyscale
+	sy = params.height/2 + (x+y)*sin30*params.xyscale - z*params.zscale
 
-	return sx, sy, z
+	return
 }
 
 func Peak(x, y float64) float64 {
