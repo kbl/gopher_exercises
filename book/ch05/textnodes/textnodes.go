@@ -1,19 +1,18 @@
 package textnodes
 
 import (
-	"fmt"
 	"golang.org/x/net/html"
 	"strings"
 )
 
 func TextNodes(n *html.Node, nodes []string) []string {
 	if n == nil {
-		return
+		return nodes
 	}
 
 	if n.Type == html.TextNode {
 		if data := trim(n.Data); data != "" {
-			nodes = append(data, nodes)
+			nodes = append(nodes, data)
 		}
 	}
 
@@ -25,7 +24,7 @@ func TextNodes(n *html.Node, nodes []string) []string {
 		nodes = TextNodes(n.FirstChild, nodes)
 	}
 
-	nodes = TextNodes(n.NextSibling, nodes)
+	return TextNodes(n.NextSibling, nodes)
 }
 
 func trim(s string) string {
