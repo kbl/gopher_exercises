@@ -1,7 +1,8 @@
 package main
 
 import (
-	"book/ch05/echonodes"
+	"book/ch05/textnodes"
+	"fmt"
 	"golang.org/x/net/html"
 	"log"
 	"os"
@@ -12,5 +13,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	echonodes.EchoNodes(doc, "")
+	for _, node := range textnodes.TextNodes(doc, nil) {
+		fmt.Println(node)
+	}
 }

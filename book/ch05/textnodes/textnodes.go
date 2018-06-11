@@ -1,4 +1,4 @@
-package echonodes
+package textnodes
 
 import (
 	"fmt"
@@ -6,26 +6,26 @@ import (
 	"strings"
 )
 
-func EchoNodes(n *html.Node, debug string) {
+func TextNodes(n *html.Node, nodes []string) []string {
 	if n == nil {
 		return
 	}
 
 	if n.Type == html.TextNode {
 		if data := trim(n.Data); data != "" {
-			fmt.Println(data)
+			nodes = append(data, nodes)
 		}
 	}
 
 	if n.Type == html.ElementNode {
 		if n.Data != "style" && n.Data != "script" {
-			EchoNodes(n.FirstChild, fmt.Sprintf("first x %v %v", n.Data, n.Type))
+			nodes = TextNodes(n.FirstChild, nodes)
 		}
 	} else {
-		EchoNodes(n.FirstChild, fmt.Sprintf("first y %v %v", n.Data, n.Type))
+		nodes = TextNodes(n.FirstChild, nodes)
 	}
 
-	EchoNodes(n.NextSibling, "next")
+	nodes = TextNodes(n.NextSibling, nodes)
 }
 
 func trim(s string) string {
