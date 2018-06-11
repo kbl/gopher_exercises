@@ -23,10 +23,12 @@ func visit(links []string, n *html.Node) []string {
 		return links
 	}
 
-	if n.Type == html.ElementNode && n.Data == "a" {
-		for _, a := range n.Attr {
-			if a.Key == "href" {
-				links = append(links, a.Val)
+	if n.Type == html.ElementNode {
+		if n.Data == "a" || n.Data == "link" || n.Data == "script" || n.Data == "img" {
+			for _, a := range n.Attr {
+				if a.Key == "href" || a.Key == "src" {
+					links = append(links, a.Val)
+				}
 			}
 		}
 	}
