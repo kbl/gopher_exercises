@@ -2,12 +2,11 @@ package github
 
 import (
 	"encoding/json"
-	//"fmt"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"net/url"
-	"os"
 	"strings"
 )
 
@@ -15,8 +14,8 @@ var issues []GithubIssue
 var milestones map[string]GithubMilestone = make(map[string]GithubMilestone)
 var users map[string]GithubUser = make(map[string]GithubUser)
 
-func Browse() {
-	prepareData()
+func Browse(userName, repoName string) {
+	prepareData(userName, repoName)
 
 	http.HandleFunc("/user/", browseUsers)
 	http.HandleFunc("/milestone/", browseMilestones)
@@ -24,12 +23,15 @@ func Browse() {
 	log.Fatal(http.ListenAndServe("localhost:8080", nil))
 }
 
-func prepareData() {
-	issuesFile, err := os.Open("issues.json")
+func prepareData(userName, repoName string) {
+	url := fmt.Sprintf(baseURLTemplate, userName, repoName)
+	fmt.Println(url)
+	resp, err := http.Get(url)
 	if err != nil {
 		log.Fatal(err)
 	}
-	json.NewDecoder(issuesFile).Decode(&issues)
+	defer resp.Body.Close()
+	json.NewDecoder(resp.Body).Decode(&issues)
 
 	for _, issue := range issues {
 		m := issue.Milestone
