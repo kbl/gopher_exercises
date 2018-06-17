@@ -198,7 +198,9 @@ func fetchText(n *html.Node, buffer *bytes.Buffer) *bytes.Buffer {
 		content := strings.Trim(n.Data, " \n\r\t")
 		buffer.WriteString(content)
 	}
-	buffer = fetchText(n.FirstChild, buffer)
+	if n.Type != html.ElementNode || (n.Data != "script" && n.Data != "style") {
+		buffer = fetchText(n.FirstChild, buffer)
+	}
 	return fetchText(n.NextSibling, buffer)
 }
 
