@@ -11,11 +11,21 @@ import (
 	"strings"
 )
 
+var stageIds = map[string]int{
+	"TECH":      0,
+	"INSPIRE":   1,
+	"MARKETING": 2,
+	"STARTUP":   3,
+	"LEADERS":   4,
+	"WORKSHO":   5,
+}
+
 type Speaker struct {
 	Id int
 	DataURL,
 	Name,
-	Stage,
+	Stage string
+	StageId int
 	ImageURL,
 	Bio,
 	Title,
@@ -55,9 +65,31 @@ func main() {
 		_ = <-results
 	}
 
-	for _, v := range speakersMap {
-		fmt.Println(v)
+	for _, s := range speakersMap {
+		fmt.Printf(
+			"INSERT INTO speaker (id, infoshareid, category, description, facebookprofile, githubprofile, linkedinprofile, twitterprofile, name) VALUES(nextval('speaker_seq'), %d, %d, %s, %s, %s, %s, %s, %s);\n",
+			s.Id,
+			s.StageId,
+			nullValue(s.Bio),
+			nullValue(s.FacebookURL),
+			nullValue(s.GithubURL),
+			nullValue(s.LinkedInURL),
+			nullValue(s.TwitterURL),
+			nullValue(s.Name),
+		)
 	}
+}
+
+func nullValue(v string) string {
+	v = strings.Trim(v, " \n\r\t")
+	if v == "" {
+		return "NULL"
+	}
+	return quote(v)
+}
+
+func quote(v string) string {
+	return fmt.Sprintf("'%s'", strings.Trim(strings.Replace(v, "'", "\\'", -1), " \n\r\t"))
 }
 
 func submitAllJobs(jobs chan<- int) {
@@ -67,7 +99,6 @@ func submitAllJobs(jobs chan<- int) {
 }
 
 func worker(workerId int, jobs <-chan int, results chan<- bool) {
-	fmt.Println("Started worker ", workerId)
 	for speakerId := range jobs {
 		readBio(speakerId)
 		results <- true
@@ -235,6 +266,7 @@ func parseSpeaker(n *html.Node) *Speaker {
 		}
 		if childNode.Data == "span" {
 			s.Stage = childNode.FirstChild.Data
+			s.StageId = stageIds[s.Stage]
 		} else if childNode.Data == "img" {
 			url, ok := getAttr(childNode, "src")
 			if !ok {
