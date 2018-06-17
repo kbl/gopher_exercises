@@ -18,7 +18,11 @@ type Speaker struct {
 	Stage,
 	ImageURL,
 	Bio,
-	Title string
+	Title,
+	GithubURL,
+	LinkedInURL,
+	FacebookURL,
+	TwitterURL string
 }
 
 var speakersMap map[int]*Speaker
@@ -38,7 +42,7 @@ func main() {
 	results := make(chan bool)
 
 	for _, s := range speakers {
-		speakersMap[s.Id] = &s
+		speakersMap[s.Id] = s
 	}
 
 	go submitAllJobs(jobs)
@@ -82,12 +86,16 @@ func readBio(speakerId int) {
 		log.Fatal(err)
 	}
 
-	bioNode := findBioNode(speakerId, doc)
-	s := speakersMap[speakerId]
+	fillBio(speakersMap[speakerId], doc)
+	fillSocialURLs(speakersMap[speakerId], doc)
+}
+
+func fillBio(s *Speaker, doc *html.Node) {
+	bioNode := findBioNode(doc)
 	s.Bio = fetchText(bioNode, bytes.NewBufferString("")).String()
 }
 
-func findBioNode(speakerId int, n *html.Node) *html.Node {
+func findBioNode(n *html.Node) *html.Node {
 	if n == nil {
 		return nil
 	}
@@ -109,10 +117,46 @@ func findBioNode(speakerId int, n *html.Node) *html.Node {
 			return n
 		}
 	}
-	if x := findBioNode(speakerId, n.FirstChild); x != nil {
+	if x := findBioNode(n.FirstChild); x != nil {
 		return x
 	}
-	return findBioNode(speakerId, n.NextSibling)
+	return findBioNode(n.NextSibling)
+}
+
+func fillSocialURLs(s *Speaker, doc *html.Node) {
+	n := findSocialNode(doc).FirstChild
+	for ; n != nil; n = n.NextSibling {
+		if n.Type != html.ElementNode || n.Data != "a" {
+			continue
+		}
+		if attr, ok := getAttr(n, "title"); ok {
+			url, _ := getAttr(n, "href")
+			if attr == "Facebook" {
+				s.FacebookURL = url
+			} else if attr == "Twitter" {
+				s.TwitterURL = url
+			} else if attr == "LinkedIn" {
+				s.LinkedInURL = url
+			} else if attr == "Github" {
+				s.GithubURL = url
+			} else {
+				log.Fatalf("Unknown type %q", attr)
+			}
+		}
+	}
+}
+
+func findSocialNode(n *html.Node) *html.Node {
+	if n == nil {
+		return nil
+	}
+	if attr, ok := getAttr(n, "class"); ok && attr == "no-wrap" {
+		return n
+	}
+	if x := findSocialNode(n.FirstChild); x != nil {
+		return x
+	}
+	return findSocialNode(n.NextSibling)
 }
 
 func fetchText(n *html.Node, buffer *bytes.Buffer) *bytes.Buffer {
@@ -154,8 +198,8 @@ func findSpeakersNode(n *html.Node) *html.Node {
 	return findSpeakersNode(n.NextSibling)
 }
 
-func parseSpeakers(n *html.Node) []Speaker {
-	var speakers []Speaker
+func parseSpeakers(n *html.Node) []*Speaker {
+	var speakers []*Speaker
 	for nestedNode := n.FirstChild; nestedNode != nil; nestedNode = nestedNode.NextSibling {
 		if _, hasAttr := getAttr(nestedNode, "data-fancybox"); nestedNode.Type == html.ElementNode && hasAttr {
 			speakers = append(speakers, parseSpeaker(nestedNode))
@@ -174,8 +218,8 @@ func getAttr(n *html.Node, attrName string) (string, bool) {
 	return "", false
 }
 
-func parseSpeaker(n *html.Node) Speaker {
-	s := Speaker{}
+func parseSpeaker(n *html.Node) *Speaker {
+	s := new(Speaker)
 	v, _ := getAttr(n, "data-fancybox")
 	id, err := strconv.Atoi(strings.Split(v, "speaker")[1])
 	if err != nil {
