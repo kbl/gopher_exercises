@@ -89,7 +89,7 @@ func nullValue(v string) string {
 }
 
 func quote(v string) string {
-	return fmt.Sprintf("'%s'", strings.Trim(strings.Replace(v, "'", "\\'", -1), " \n\r\t"))
+	return fmt.Sprintf("'%s'", strings.Trim(strings.Replace(v, "'", "''", -1), " \n\r\t"))
 }
 
 func submitAllJobs(jobs chan<- int) {
