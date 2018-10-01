@@ -1,7 +1,7 @@
 package server
 
 import (
-	"book/ch1/lissajous"
+	"book/ch01/lissajous"
 	"fmt"
 	"log"
 	"net/http"
