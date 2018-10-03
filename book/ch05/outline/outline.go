@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+var depth = 0
+
 func Outline(reader io.Reader) string {
 	doc, err := html.Parse(reader)
 	if err != nil {
@@ -17,10 +19,35 @@ func Outline(reader io.Reader) string {
 	return forEachNode(doc, startElement, endElement)
 }
 
-func forEachNode(n *html.Node, pre, post func(n *html.Node) string) string {
+func ElementById(reader io.Reader, id string) *html.Node {
+	doc, err := html.Parse(reader)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "outline: %v\n", err)
+		os.Exit(1)
+	}
+	return elementById(doc, id)
+}
+
+func elementById(n *html.Node, id string) *html.Node {
+	fmt.Println(id)
+	_, stopIteration := startElement(n, id)
+	if stopIteration {
+		return n
+	}
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		output := elementById(c, id)
+		if output != nil {
+			return output
+		}
+	}
+	return nil
+}
+
+func forEachNode(n *html.Node, pre func(n *html.Node, id string) (string, bool), post func(n *html.Node) string) string {
 	output := ""
 	if pre != nil {
-		output += pre(n)
+		part, _ := pre(n, "")
+		output += part
 	}
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
 		output += forEachNode(c, pre, post)
@@ -31,13 +58,19 @@ func forEachNode(n *html.Node, pre, post func(n *html.Node) string) string {
 	return output
 }
 
-var depth = 0
-
-func startElement(n *html.Node) (output string) {
+func startElement(n *html.Node, id string) (output string, stopTraversal bool) {
 	switch n.Type {
 	case html.DoctypeNode:
 		output = fmt.Sprintf("%*s<!doctype %s>\n", depth*2, "", n.Data)
 	case html.ElementNode:
+		if id != "" {
+			for _, a := range n.Attr {
+				if a.Key == "id" && a.Val == id {
+					stopTraversal = true
+					return
+				}
+			}
+		}
 		attributes := printAttributes(n.Attr)
 		closing := ">"
 		if n.FirstChild == nil {
