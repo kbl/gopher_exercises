@@ -1,5 +1,6 @@
 package expand
 
+// todo handling illegal tokens
 func Expand(s string, op func(string) string) string {
 	tokenStart, tokenEnd := -1, -1
 	previousTokenEnd := 0
@@ -11,9 +12,6 @@ func Expand(s string, op func(string) string) string {
 			continue
 		}
 		if tokenStart != -1 && r == ' ' {
-			if tokenStart+1 == i {
-				panic("Illegal token!")
-			}
 			tokenEnd = i
 			output += string(sRunes[previousTokenEnd:tokenStart])
 			output += op(string(sRunes[tokenStart+1 : tokenEnd]))
