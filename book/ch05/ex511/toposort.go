@@ -1,6 +1,11 @@
-package ex510
+package ex511
 
-import "sort"
+import (
+	"fmt"
+	"sort"
+)
+
+// my own
 
 var Prereqs = map[string][]string{
 	"algorithms":            {"data structures"},
@@ -13,17 +18,26 @@ var Prereqs = map[string][]string{
 	"networks":              {"operating systems"},
 	"operating systems":     {"data structures", "computer organization"},
 	"programming languages": {"data structures", "computer organization"},
+	//"linear algebra":        {"calculus"},
 }
 
-func TopoSort(m map[string][]string) []string {
+// TODO
+func TopoSortWithCycles(m map[string][]string) []string {
 	var order []string
 	seen := make(map[string]bool)
-	var visitAll func(items []string)
-	visitAll = func(items []string) {
+	var visitAll func(items, dependencies []string)
+	visitAll = func(items, dependencies []string) {
 		for _, item := range items {
+			for _, d := range dependencies {
+				if d == item {
+					fmt.Printf("cycle found! %s %s\n", dependencies, item)
+					return
+				}
+			}
+			dependencies = append(dependencies, item)
+			visitAll(m[item], dependencies)
 			if !seen[item] {
 				seen[item] = true
-				visitAll(m[item])
 				order = append(order, item)
 			}
 		}
@@ -35,36 +49,6 @@ func TopoSort(m map[string][]string) []string {
 	}
 
 	sort.Strings(keys)
-	visitAll(keys)
-	return order
-}
-
-// my own
-
-func TopoSortNonDeterministic(m map[string][]string) []string {
-	var order []string
-	seen := make(map[string]bool)
-	var visitAll func(items map[string]bool)
-	visitAll = func(items map[string]bool) {
-		for item := range items {
-			if !seen[item] {
-				seen[item] = true
-				tempPrereqs := make(map[string]bool)
-				for _, prereq := range m[item] {
-					tempPrereqs[prereq] = false
-				}
-				visitAll(tempPrereqs)
-				order = append(order, item)
-			}
-		}
-	}
-
-	keys := make(map[string]bool)
-	for key := range m {
-		keys[key] = false
-	}
-
-	visitAll(keys)
-
+	visitAll(keys, nil)
 	return order
 }
