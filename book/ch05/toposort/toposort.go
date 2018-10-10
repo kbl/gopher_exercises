@@ -1,10 +1,6 @@
-package ex511
+package toposort
 
-import (
-	"errors"
-	"fmt"
-	"sort"
-)
+import "sort"
 
 var Prereqs = map[string][]string{
 	"algorithms":            {"data structures"},
@@ -17,32 +13,20 @@ var Prereqs = map[string][]string{
 	"networks":              {"operating systems"},
 	"operating systems":     {"data structures", "computer organization"},
 	"programming languages": {"data structures", "computer organization"},
-	"intro to programming":  {"networks"}, // cycle
 }
 
-func TopoSortWithCycles(m map[string][]string) ([]string, error) {
+func TopoSort(m map[string][]string) []string {
 	var order []string
 	seen := make(map[string]bool)
-	var visitAll func(items, dependencies []string) error
-	visitAll = func(items, dependencies []string) error {
+	var visitAll func(items []string)
+	visitAll = func(items []string) {
 		for _, item := range items {
-			for _, d := range dependencies {
-				if d == item {
-					fmt.Println("dupa")
-					return errors.New(fmt.Sprintf("cycle found! %s %s", dependencies, item))
-				}
-			}
-			item_dependencies := append(dependencies, item)
-			err := visitAll(m[item], item_dependencies)
-			if err != nil {
-				return err
-			}
 			if !seen[item] {
 				seen[item] = true
+				visitAll(m[item])
 				order = append(order, item)
 			}
 		}
-		return nil
 	}
 
 	var keys []string
@@ -51,9 +35,6 @@ func TopoSortWithCycles(m map[string][]string) ([]string, error) {
 	}
 
 	sort.Strings(keys)
-	err := visitAll(keys, nil)
-	if err == nil {
-		return order, nil
-	}
-	return nil, err
+	visitAll(keys)
+	return order
 }
