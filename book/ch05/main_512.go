@@ -13,5 +13,6 @@ func main() {
 		fmt.Fprintf(os.Stderr, "outline: %v\n", err)
 		os.Exit(1)
 	}
-	ex512.ForEachNode(doc, ex512.StartElement, ex512.EndElement)
+	// ex512.ForEachNode(doc, ex512.StartElement, ex512.EndElement)
+	ex512.Outline(doc)
 }
