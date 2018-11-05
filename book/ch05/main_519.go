@@ -2,22 +2,15 @@ package main
 
 import "fmt"
 
-func magic() {
-	panic("magic")
+func magic() (returnValue string) {
+	d := func() {
+		recover()
+		returnValue = "magic"
+	}
+	defer d()
+	panic("panic")
 }
 
 func main() {
-	var returnValue interface{}
-
-	getValue := func() {
-		returnValue = recover()
-	}
-	printValue := func() {
-		fmt.Println(returnValue)
-	}
-
-	defer printValue()
-	defer getValue()
-
-	magic()
+	fmt.Println(magic())
 }
