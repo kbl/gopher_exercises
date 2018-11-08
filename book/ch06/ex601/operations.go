@@ -22,9 +22,11 @@ func (s *IntSet) Remove(x int) {
 }
 
 func (s *IntSet) Clear() {
-
+	s.words = nil
 }
 
 func (s *IntSet) Copy() *IntSet {
-	return nil
+	copy := &IntSet{}
+	copy.words = append([]uint64(nil), s.words...)
+	return copy
 }
