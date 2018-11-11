@@ -1,26 +1,33 @@
 package intset
 
 func (s *IntSet) IntersectWith(t *IntSet) {
-	var words []uint64
 	for bucket, word := range t.words {
-		if bucket > len(s.words) {
+		if bucket >= len(s.words) {
 			break
 		}
-		words = append(words, word&s.words[bucket])
+		s.words[bucket] &= word
 	}
-	s.words = words
 }
 
 func (s *IntSet) DifferenceWith(t *IntSet) {
-	var words []uint64
-	for bucket, word := range s.words {
-		if bucket > len(s.words) {
+	for bucket, word := range t.words {
+		if bucket >= len(s.words) {
 			break
 		}
-		words = append(words, word&s.words[bucket])
+		s.words[bucket] &= ^word
 	}
-	s.words = words
 }
 
 func (s *IntSet) SymetricDifferenceWith(t *IntSet) {
+	for bucket, word := range t.words {
+		if bucket >= len(s.words) {
+			s.words = append(s.words, t.words[bucket:]...)
+			break
+		}
+		s.words[bucket] = xor(s.words[bucket], word)
+	}
+}
+
+func xor(a, b uint64) uint64 {
+	return (^(a & b)) & (a | b)
 }
