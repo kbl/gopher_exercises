@@ -54,3 +54,26 @@ func TestClear(t *testing.T) {
 		t.Errorf("s.Len() = %v, wants %v", len, 0)
 	}
 }
+
+func TestCopy(t *testing.T) {
+	var has bool
+	var orig IntSet
+	orig.Add(10)
+	orig.Add(120)
+
+	copy := orig.Copy()
+	copy.Remove(120)
+
+	if has = orig.Has(10); !has {
+		t.Errorf("orig.Has(%v) = %v, wants %v", 10, has, true)
+	}
+	if has = copy.Has(10); !has {
+		t.Errorf("copy.Has(%v) = %v, wants %v", 10, has, true)
+	}
+	if has = orig.Has(120); !has {
+		t.Errorf("orig.Has(%v) = %v, wants %v", 120, has, true)
+	}
+	if has = copy.Has(120); has {
+		t.Errorf("copy.Has(%v) = %v, wants %v", 120, has, false)
+	}
+}
