@@ -16,7 +16,7 @@ func Sort(values []int) {
 func appendValues(values []int, t *tree) []int {
 	if t != nil {
 		values = appendValues(values, t.left)
-		values = appendValues(values, t.value)
+		values = append(values, t.value)
 		values = appendValues(values, t.right)
 	}
 	return values
