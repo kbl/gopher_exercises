@@ -12,6 +12,10 @@ type reader struct {
 func (r *reader) Read(p []byte) (n int, err error) {
 	count := copy(p, r.buffer[r.pointer:])
 	r.pointer += count
+
+	if count == 0 {
+		return count, io.EOF
+	}
 	return count, nil
 }
 
