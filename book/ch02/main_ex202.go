@@ -36,7 +36,7 @@ func main() {
 }
 
 func convert(t float64) {
-	f := ex201.Farenheit(t)
+	f := ex201.Fahrenheit(t)
 	k := ex201.Kelvin(t)
 	c := ex201.Celsius(t)
 	fmt.Printf("%s = %s = %s\n", f, f.ToC(), f.ToK())
