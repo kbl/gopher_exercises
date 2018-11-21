@@ -1,7 +1,8 @@
 package main
 
 import (
-	"book/ch02/conv"
+	"book/ch02/ex201"
+	"book/ch02/ex202"
 	"bufio"
 	"fmt"
 	"log"
@@ -35,20 +36,19 @@ func main() {
 }
 
 func convert(t float64) {
-	f := conv.Farenheit(t)
-	k := conv.Kelvin(t)
-	c := conv.Celsius(t)
+	f := ex201.Farenheit(t)
+	k := ex201.Kelvin(t)
+	c := ex201.Celsius(t)
 	fmt.Printf("%s = %s = %s\n", f, f.ToC(), f.ToK())
 	fmt.Printf("%s = %s = %s\n", c, c.ToK(), c.ToF())
 	fmt.Printf("%s = %s = %s\n", k, k.ToF(), k.ToC())
 
-	kg := conv.Kilogram(t)
-	lbs := conv.Pound(t)
+	kg := ex202.Kilogram(t)
+	lbs := ex202.Pound(t)
 	fmt.Printf("%s = %s\n", kg, kg.ToP())
 	fmt.Printf("%s = %s\n", lbs, lbs.ToK())
-
-	meter := conv.Meter(t)
-	feet := conv.Feet(t)
+	meter := ex202.Meter(t)
+	feet := ex202.Feet(t)
 	fmt.Printf("%s = %s\n", meter, meter.ToF())
 	fmt.Printf("%s = %s\n", feet, feet.ToM())
 }
