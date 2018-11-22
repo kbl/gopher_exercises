@@ -67,8 +67,8 @@ func (t *TrackTable) String() string {
 	tw := new(tabwriter.Writer).Init(&b, 0, 8, 2, ' ', 0)
 	fmt.Fprintf(tw, format, "Title", "Artist", "Album", "Year", "Length")
 	fmt.Fprintf(tw, format, "-----", "------", "-----", "----", "------")
-	for _, t := range tracks {
-		fmt.Fprintf(tw, format, t.Title, t.Artist, t.Album, t.Year, t.Length)
+	for _, track := range t.Tracks {
+		fmt.Fprintf(tw, format, track.Title, track.Artist, track.Album, track.Year, track.Length)
 	}
 	tw.Flush()
 
