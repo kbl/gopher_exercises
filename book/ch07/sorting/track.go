@@ -15,7 +15,7 @@ type Track struct {
 	Length time.Duration
 }
 
-func length(s string) time.Duration {
+func Length(s string) time.Duration {
 	d, err := time.ParseDuration(s)
 	if err != nil {
 		panic(s)
@@ -40,7 +40,7 @@ func (x TrackSlice) Len() int {
 	return len(x)
 }
 
-func (x TrackSlice) Less(i, j, int) bool {
+func (x TrackSlice) Less(i, j int) bool {
 	return x[i].Artist < x[j].Artist
 }
 
