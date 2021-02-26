@@ -1,7 +1,7 @@
 package main
 
 import (
-	"book/ch03/surface"
+	"github.com/kbl/gopher_exercises/book/ch03/surface"
 	"log"
 	"net/http"
 	"os"

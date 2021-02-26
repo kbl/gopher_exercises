@@ -1,10 +1,10 @@
 package main
 
 import (
-	"book/ch02/ex201"
-	"book/ch02/ex202"
 	"bufio"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch02/ex201"
+	"github.com/kbl/gopher_exercises/book/ch02/ex202"
 	"log"
 	"os"
 	"strconv"

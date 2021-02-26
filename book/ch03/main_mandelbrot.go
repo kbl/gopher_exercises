@@ -1,7 +1,7 @@
 package main
 
 import (
-	"book/ch03/mandelbrot"
+	"github.com/kbl/gopher_exercises/book/ch03/mandelbrot"
 	"log"
 	"net/http"
 	"strconv"

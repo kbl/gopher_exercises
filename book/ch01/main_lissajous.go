@@ -1,7 +1,7 @@
 package main
 
 import (
-	"book/ch01/lissajous"
+	"github.com/kbl/gopher_exercises/book/ch01/lissajous"
 	"os"
 )
 

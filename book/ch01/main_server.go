@@ -1,6 +1,6 @@
 package main
 
-import "book/ch01/server"
+import "github.com/kbl/gopher_exercises/book/ch01/server"
 
 func main() {
 	server.Start()

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"book/ch03/comma"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch03/comma"
 )
 
 func main() {

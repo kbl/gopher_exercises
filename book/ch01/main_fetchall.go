@@ -1,8 +1,8 @@
 package main
 
 import (
-	"book/ch01/fetch"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch01/fetch"
 	"io/ioutil"
 	"os"
 	"strings"

@@ -1,8 +1,8 @@
 package server
 
 import (
-	"book/ch01/lissajous"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch01/lissajous"
 	"log"
 	"net/http"
 	"strconv"
