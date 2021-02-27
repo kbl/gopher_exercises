@@ -1,8 +1,8 @@
 package main
 
 import (
-	"book/ch05/ex517"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch05/ex517"
 	"golang.org/x/net/html"
 	"os"
 )

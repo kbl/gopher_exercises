@@ -1,9 +1,9 @@
 package main
 
 import (
-	"book/ch05/ex510"
-	"book/ch05/toposort"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch05/ex510"
+	"github.com/kbl/gopher_exercises/book/ch05/toposort"
 )
 
 func main() {

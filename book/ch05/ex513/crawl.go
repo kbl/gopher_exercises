@@ -1,8 +1,8 @@
 package ex513
 
 import (
-	"book/ch05/links"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch05/links"
 	"io/ioutil"
 	"log"
 	"net/http"

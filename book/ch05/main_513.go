@@ -1,7 +1,7 @@
 package main
 
 import (
-	"book/ch05/ex513"
+	"github.com/kbl/gopher_exercises/book/ch05/ex513"
 	"log"
 	"os"
 )

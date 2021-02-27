@@ -1,8 +1,8 @@
 package main
 
 import (
-	"book/ch05/count"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch05/my_count"
 	"golang.org/x/net/html"
 	"log"
 	"os"
@@ -13,7 +13,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	for k, v := range count.Count(doc) {
+	for k, v := range my_count.Count(doc) {
 		fmt.Println(k, v)
 	}
 }

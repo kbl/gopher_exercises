@@ -1,8 +1,8 @@
 package main
 
 import (
-	"book/ch05/ex511"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch05/ex511"
 	"log"
 )
 

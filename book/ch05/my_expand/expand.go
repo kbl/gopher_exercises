@@ -1,4 +1,4 @@
-package expand
+package my_expand
 
 // todo handling illegal tokens
 func Expand(s string, op func(string) string) string {

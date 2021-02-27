@@ -1,4 +1,4 @@
-package findlinks
+package my_findlinks
 
 import (
 	"fmt"
@@ -37,14 +37,14 @@ func visit(links []string, n *html.Node) []string {
 	return visit(links, n.FirstChild)
 }
 
-func Extract(url string) ([]string, err) {
-	resp, err := htt.Get(url)
+func Extract(url string) ([]string, error) {
+	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
 	if resp.StatusCode != http.StatusOK {
 		resp.Body.Close()
-		return nil, fmt.Errorf("getting: %s: %s", url, respStatus)
+		return nil, fmt.Errorf("getting: %s: %s", url, resp.Status)
 	}
 
 	doc, err := html.Parse(resp.Body)
@@ -54,9 +54,9 @@ func Extract(url string) ([]string, err) {
 	}
 
 	var links []string
-	visitNode := func(n *html.Node, _ string) (string, bool) {
+	visitNode := func(n *html.Node) []string {
 		if n == nil {
-			return links, true
+			return links
 		}
 
 		if n.Type == html.ElementNode && n.Data == "a" {
@@ -71,21 +71,28 @@ func Extract(url string) ([]string, err) {
 				links = append(links, link.String())
 			}
 		}
+		return links
 	}
 	forEachNode(doc, visitNode, nil)
 	return links, nil
 }
 
-func forEachNode(n *html.Node, pre, post func(n *html.Node) string) string {
-	output := ""
+func forEachNode(n *html.Node, pre, post func(n *html.Node) []string) []string {
+	var output []string
 	if pre != nil {
-		output += pre(n)
+		for _, nested := range pre(n) {
+			output = append(output, nested)
+		}
 	}
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		output += forEachNode(c, pre, post)
+		for _, nested := range forEachNode(c, pre, post) {
+			output = append(output, nested)
+		}
 	}
 	if post != nil {
-		output += post(n)
+		for _, nested := range post(n) {
+			output = append(output, nested)
+		}
 	}
 	return output
 }

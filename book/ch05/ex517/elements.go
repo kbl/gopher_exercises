@@ -1,7 +1,7 @@
 package ex517
 
 import (
-	"book/ch05/outline2"
+	"github.com/kbl/gopher_exercises/book/ch05/outline2"
 	"golang.org/x/net/html"
 )
 

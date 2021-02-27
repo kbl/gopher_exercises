@@ -1,9 +1,9 @@
-package count
+package my_count
 
 import (
-	"book/ch05/textnodes"
 	"bufio"
 	"bytes"
+	"github.com/kbl/gopher_exercises/book/ch05/my_textnodes"
 	"golang.org/x/net/html"
 )
 
@@ -23,7 +23,7 @@ func count(m map[string]int, node *html.Node) map[string]int {
 }
 
 func CountWordsAndImages(node *html.Node) (words, images int) {
-	for _, text := range textnodes.TextNodes(node, nil) {
+	for _, text := range my_textnodes.TextNodes(node, nil) {
 		in := bufio.NewScanner(bytes.NewBufferString(text))
 		in.Split(bufio.ScanWords)
 

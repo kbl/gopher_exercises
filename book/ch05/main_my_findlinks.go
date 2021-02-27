@@ -1,9 +1,9 @@
 package main
 
 import (
-	"book/ch05/findlinks"
+	"github.com/kbl/gopher_exercises/book/ch05/my_findlinks"
 )
 
 func main() {
-	findlinks.Find()
+	my_findlinks.Find()
 }

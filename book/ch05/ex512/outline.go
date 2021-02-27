@@ -1,8 +1,8 @@
 package ex512
 
 import (
-	"book/ch05/outline2"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch05/outline2"
 	"golang.org/x/net/html"
 )
 

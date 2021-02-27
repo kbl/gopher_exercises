@@ -1,8 +1,8 @@
 package findlinks3
 
 import (
-	"book/ch05/links"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch05/links"
 	"log"
 )
 

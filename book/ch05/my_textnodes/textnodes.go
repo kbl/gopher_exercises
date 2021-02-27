@@ -1,4 +1,4 @@
-package textnodes
+package my_textnodes
 
 import (
 	"golang.org/x/net/html"

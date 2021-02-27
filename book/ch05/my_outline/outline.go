@@ -1,4 +1,4 @@
-package outline
+package my_outline
 
 import (
 	"fmt"

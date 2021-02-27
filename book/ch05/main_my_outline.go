@@ -1,12 +1,12 @@
 package main
 
 import (
-	"book/ch05/outline"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch05/my_outline"
 	"os"
 )
 
 func main() {
-	fmt.Println(outline.Outline(os.Stdin))
-	// fmt.Println(outline.ElementById(os.Stdin, "main"))
+	fmt.Println(my_outline.Outline(os.Stdin))
+	// fmt.Println(my_outline.ElementById(os.Stdin, "main"))
 }

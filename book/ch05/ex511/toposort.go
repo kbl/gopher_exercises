@@ -28,7 +28,6 @@ func TopoSortWithCycles(m map[string][]string) ([]string, error) {
 		for _, item := range items {
 			for _, d := range dependencies {
 				if d == item {
-					fmt.Println("dupa")
 					return errors.New(fmt.Sprintf("cycle found! %s %s", dependencies, item))
 				}
 			}

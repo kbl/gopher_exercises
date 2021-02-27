@@ -1,4 +1,4 @@
-package expand
+package my_expand
 
 import (
 	"fmt"
