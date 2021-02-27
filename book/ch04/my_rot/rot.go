@@ -1,15 +1,15 @@
-package rot
+package my_rot
 
-import "book/ch04/rev"
+import "github.com/kbl/gopher_exercises/book/ch04/my_rev"
 
 func RotWithRev(s []int, by int) {
 	if len(s) == 0 || by < 1 {
 		return
 	}
 	by %= len(s)
-	rev.Rev(s[by:])
-	rev.Rev(s[:by])
-	rev.Rev(s)
+	my_rev.Rev(s[by:])
+	my_rev.Rev(s[:by])
+	my_rev.Rev(s)
 }
 
 func Rot(s []int, by int) {

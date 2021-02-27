@@ -1,4 +1,4 @@
-package github
+package my_github
 
 import "time"
 

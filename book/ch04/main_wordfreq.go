@@ -1,13 +1,13 @@
 package main
 
 import (
-	"book/ch04/count"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch04/my_count"
 	"strings"
 )
 
 func main() {
-	stats := count.Words(strings.NewReader("zażółć gęślą jaźń"))
+	stats := my_count.Words(strings.NewReader("zażółć gęślą jaźń"))
 	fmt.Printf("word\t\tcount\n")
 	for w, c := range stats.Words {
 		fmt.Printf("%q\t\t%d\n", w, c)

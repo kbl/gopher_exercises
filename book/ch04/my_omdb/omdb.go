@@ -1,4 +1,4 @@
-package omdb
+package my_omdb
 
 import (
 	"bytes"

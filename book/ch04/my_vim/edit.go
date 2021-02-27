@@ -1,4 +1,4 @@
-package vim
+package my_vim
 
 import (
 	"io/ioutil"

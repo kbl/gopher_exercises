@@ -1,8 +1,8 @@
 package main
 
 import (
-	"book/ch04/xkcd"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch04/my_xkcd"
 	"os"
 )
 
@@ -13,8 +13,8 @@ func main() {
 	}
 	searchTerm := os.Args[1]
 	archivePath := "./archive"
-	xkcd.ArchiveTo(archivePath)
-	for _, comic := range xkcd.Search(archivePath, searchTerm) {
+	my_xkcd.ArchiveTo(archivePath)
+	for _, comic := range my_xkcd.Search(archivePath, searchTerm) {
 		fmt.Println(comic.URL())
 		fmt.Println(comic.Title)
 		fmt.Println(comic.Transcript)

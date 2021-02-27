@@ -1,21 +1,21 @@
 package main
 
 import (
-	"book/ch04/github"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch04/my_github"
 	"log"
 	"os"
 	"time"
 )
 
 func main() {
-	result, err := github.SearchIssues(os.Args[1:])
+	result, err := my_github.SearchIssues(os.Args[1:])
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	now := time.Now()
-	issues := make(map[string][]*github.Issue)
+	issues := make(map[string][]*my_github.Issue)
 
 	lessThanMonth, err := time.ParseDuration(fmt.Sprintf("%dh", 30*24))
 	if err != nil {
@@ -38,7 +38,7 @@ func main() {
 		}
 
 		if _, exists := issues[category]; !exists {
-			issues[category] = make([]*github.Issue, 0)
+			issues[category] = make([]*my_github.Issue, 0)
 		}
 
 		issues[category] = append(issues[category], item)

@@ -1,4 +1,4 @@
-package xkcd
+package my_xkcd
 
 import (
 	"encoding/json"

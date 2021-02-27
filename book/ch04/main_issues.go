@@ -1,9 +1,9 @@
 package main
 
 import (
-	"book/ch04/github"
-	"book/ch04/vim"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch04/my_github"
+	"github.com/kbl/gopher_exercises/book/ch04/my_vim"
 	"log"
 	"os"
 )
@@ -17,30 +17,30 @@ func main() {
 	repoName := os.Args[3]
 	actionName := os.Args[4]
 
-	client := github.NewClient(
-		&github.Repository{
+	client := my_github.NewClient(
+		&my_github.Repository{
 			Name:  repoName,
 			Owner: userName,
 		},
 		apiToken,
 	)
 
-	action, err := github.ToAction(actionName)
+	action, err := my_github.ToAction(actionName)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if action == github.CREATE {
-		id := client.Create(vim.Prompt("<title>"), vim.Prompt("<body>"))
+	if action == my_github.CREATE {
+		id := client.Create(my_vim.Prompt("<title>"), my_vim.Prompt("<body>"))
 		fmt.Printf("New issue with id %d was created.\n", id)
-	} else if action == github.READ {
+	} else if action == my_github.READ {
 		issueId := promptInt("Podaj id: ")
 		fmt.Println(*client.Read(issueId))
-	} else if action == github.EDIT {
+	} else if action == my_github.EDIT {
 		issueId := promptInt("Podaj id: ")
 		client.Edit(issueId)
-	} else if action == github.CLOSE {
+	} else if action == my_github.CLOSE {
 		issueId := promptInt("Podaj id: ")
 		client.Close(issueId)
 	}

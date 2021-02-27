@@ -1,4 +1,4 @@
-package rev
+package my_rev
 
 import "unicode/utf8"
 

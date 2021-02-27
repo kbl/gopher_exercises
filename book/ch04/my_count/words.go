@@ -1,4 +1,4 @@
-package count
+package my_count
 
 import (
 	"bufio"

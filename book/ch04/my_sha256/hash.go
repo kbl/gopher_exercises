@@ -1,4 +1,4 @@
-package sha256
+package my_sha256
 
 import (
 	"bytes"

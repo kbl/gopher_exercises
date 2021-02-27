@@ -1,7 +1,7 @@
 package main
 
 import (
-	"book/ch04/github"
+	"github.com/kbl/gopher_exercises/book/ch04/my_github"
 	"log"
 	"os"
 )
@@ -13,5 +13,5 @@ func main() {
 	userName := os.Args[1]
 	repoName := os.Args[2]
 
-	github.Browse(userName, repoName)
+	my_github.Browse(userName, repoName)
 }

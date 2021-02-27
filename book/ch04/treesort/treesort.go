@@ -1,4 +1,4 @@
-package treesort
+package my_treesort
 
 type tree struct {
 	value       int

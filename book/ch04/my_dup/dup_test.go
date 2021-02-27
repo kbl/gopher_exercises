@@ -1,4 +1,4 @@
-package dup
+package my_dup
 
 import (
 	"reflect"

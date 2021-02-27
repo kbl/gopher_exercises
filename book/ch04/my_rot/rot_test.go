@@ -1,4 +1,4 @@
-package rot
+package my_rot
 
 import (
 	"reflect"

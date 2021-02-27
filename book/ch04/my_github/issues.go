@@ -1,11 +1,11 @@
-package github
+package my_github
 
 import (
-	"book/ch04/vim"
 	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch04/my_vim"
 	"io"
 	"log"
 	"net/http"
@@ -162,8 +162,8 @@ func (c *Client) Create(title, description string) int {
 
 func (c *Client) Edit(issueId int) {
 	issue := c.Read(issueId)
-	issue.Title = vim.Prompt(issue.Title)
-	issue.Body = vim.Prompt(issue.Body)
+	issue.Title = my_vim.Prompt(issue.Title)
+	issue.Body = my_vim.Prompt(issue.Body)
 
 	var body bytes.Buffer
 	url := fmt.Sprintf("%s/%d", c.endpoint, issueId)

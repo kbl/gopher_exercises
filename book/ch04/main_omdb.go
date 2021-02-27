@@ -1,9 +1,9 @@
 package main
 
 import (
-	"book/ch04/omdb"
 	"bytes"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch04/my_omdb"
 	"io"
 	"os"
 )
@@ -17,7 +17,7 @@ func main() {
 	apiToken := os.Args[1]
 	movieTitle := os.Args[2]
 
-	poster := omdb.DownloadPoster(apiToken, movieTitle)
+	poster := my_omdb.DownloadPoster(apiToken, movieTitle)
 	buffer := bytes.NewBuffer(poster)
 
 	if poster != nil {
