@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
-import "book/ch06/intset"
+import (
+	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch06/intset"
+)
 
 func main() {
 	var x, y intset.IntSet
