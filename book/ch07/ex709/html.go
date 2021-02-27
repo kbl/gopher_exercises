@@ -1,8 +1,8 @@
 package ex709
 
 import (
-	"book/ch07/ex708"
-	"book/ch07/sorting"
+	"github.com/kbl/gopher_exercises/book/ch07/ex708"
+	"github.com/kbl/gopher_exercises/book/ch07/sorting"
 	"html/template"
 )
 

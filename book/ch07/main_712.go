@@ -1,8 +1,8 @@
 package main
 
 import (
-	"book/ch07/ex712"
-	"book/ch07/http4"
+	"github.com/kbl/gopher_exercises/book/ch07/ex712"
+	"github.com/kbl/gopher_exercises/book/ch07/http4"
 	"log"
 	"net/http"
 )

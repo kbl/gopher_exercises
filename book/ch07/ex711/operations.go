@@ -1,8 +1,8 @@
 package ex711
 
 import (
-	"book/ch07/http4"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch07/http4"
 	"net/http"
 	"strconv"
 )

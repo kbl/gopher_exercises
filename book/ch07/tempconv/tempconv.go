@@ -1,9 +1,9 @@
 package tempconv
 
 import (
-	"book/ch02/ex201"
 	"flag"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch02/ex201"
 )
 
 type celsiusFlag struct {

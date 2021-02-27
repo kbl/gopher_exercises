@@ -1,7 +1,7 @@
 package ex712
 
 import (
-	"book/ch07/ex711"
+	"github.com/kbl/gopher_exercises/book/ch07/ex711"
 	"html/template"
 	"net/http"
 )

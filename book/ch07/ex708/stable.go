@@ -1,9 +1,9 @@
 package ex708
 
 import (
-	"book/ch07/sorting"
 	"bytes"
 	"fmt"
+	"github.com/kbl/gopher_exercises/book/ch07/sorting"
 	"sort"
 	"text/tabwriter"
 )
